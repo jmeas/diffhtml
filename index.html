@@ -50,12 +50,19 @@
         left: -4px;
         font-family: Consolas,Monaco,"Andale Mono",monospace;
       }
+      footer {
+        margin-top: 40px;
+      }
+      a { text-decoration: none; color: #333; }
+      a span { position: relative; top: -5px; }
+      .bump { margin-top: 40px; }
     </style>
   </head>
   <body>
     <h1>Element.prototype.diffHTML</h1>
+    <a href="http://github.com/tbranyen/diffhtml"><span>GitHub Repository</span></a>
     <iframe src="https://ghbtns.com/github-btn.html?user=tbranyen&repo=diffhtml&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-    <p>
+    <p class="bump">
       Allows you to easily swap out markup and have an intelligent virtual diff
       patch in the changes. Contrast to innerHTML that blows everything away
       when set.
@@ -85,6 +92,15 @@
       disconnect Document, an empty <code>&lt;div&gt;</code> is created and
       <code>innerHTML</code> is applied to parse out the DOM tree using
       very little code.
+    </p>
+
+    <h2>Installing</h2>
+
+    <p>
+      You can easily install by downloading the <a href="https://raw.githubusercontent.com/tbranyen/diffhtml/master/dist/diffhtml.js">latest prebuilt JavaScript
+      distribution</a> or by using NPM:
+
+    <pre class="language-javascript"><code>npm install diffhtml</code></pre>
     </p>
 
     <h2>Demo</h2>
@@ -176,5 +192,9 @@
         });
       }
     </script>
+
+    <footer>
+      <p>MIT License 2015, Tim Branyen (<a href="https://twitter.com/tbranyen">@tbranyen</a>)</p>
+    </footer>
   </body>
 </html>
