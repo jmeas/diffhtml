@@ -44,7 +44,7 @@
         background: #F3D0D0;
       }
       .CodeMirror {
-        background: transparent;
+        background: rgba(255, 255, 255, .5);
         height: auto;
         font-size: 16px;
         top: -4px;
@@ -151,8 +151,8 @@
       }
 
       function update(editorText, jsonText) {
-        editorText = editorText || defaults.editorText;
-        jsonText = jsonText || defaults.jsonText;
+        editorText = typeof editorText === 'string' ? editorText : defaults.editorText;
+        jsonText = typeof jsonText === 'string' ? jsonText : defaults.jsonText;
 
         try {
           var markup = parseEntities(editorText);
@@ -178,10 +178,15 @@
       makeCodeMirror(editor, 'editorText');
       makeCodeMirror(json, 'jsonText');
 
+      editor.onclick = json.onclick = function(ev) {
+        ev.preventDefault();
+        this.firstChild.dispatchEvent('click');
+      };
+
       function makeCodeMirror(el, name) {
         var codeMirror = CodeMirror(el, { value: defaults[name] });
 
-        codeMirror.on('inputRead', function(ev) {
+        codeMirror.on('change', function(ev) {
           var contents = codeMirror.getValue();
 
           if (el.classList.contains('editor')) {
