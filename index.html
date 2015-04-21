@@ -43,12 +43,18 @@
       .editor.error, .json.error {
         background: #F3D0D0;
       }
+      .CodeMirror-scroll::-webkit-scrollbar { width: 0 !important }
+      .CodeMirror-scroll {
+        overflow: -moz-scrollbars-none !important;
+        -ms-overflow-style: none;
+      }
       .CodeMirror {
         background: rgba(255, 255, 255, .5);
+        min-height: 25vh;
+        height: auto;
+        border: 1px solid #E9E9E9;
         height: auto;
         font-size: 16px;
-        top: -4px;
-        left: -4px;
         font-family: Consolas,Monaco,"Andale Mono",monospace;
       }
       footer {
@@ -154,6 +160,9 @@
         editorText = typeof editorText === 'string' ? editorText : defaults.editorText;
         jsonText = typeof jsonText === 'string' ? jsonText : defaults.jsonText;
 
+        defaults.editorText = editorText;
+        defaults.jsonText = jsonText;
+
         try {
           var markup = parseEntities(editorText);
           var data = JSON.parse(jsonText);
@@ -163,7 +172,6 @@
           editor.classList.remove('error');
 
         } catch(ex) {
-          console.log(ex);
           if (ex.message.indexOf('JSON') === 0) {
             json.classList.add('error');
           }
@@ -178,13 +186,8 @@
       makeCodeMirror(editor, 'editorText');
       makeCodeMirror(json, 'jsonText');
 
-      editor.onclick = json.onclick = function(ev) {
-        ev.preventDefault();
-        this.firstChild.dispatchEvent('click');
-      };
-
       function makeCodeMirror(el, name) {
-        var codeMirror = CodeMirror(el, { value: defaults[name] });
+        var codeMirror = CodeMirror(el, { lineWrapping: true, value: defaults[name] });
 
         codeMirror.on('change', function(ev) {
           var contents = codeMirror.getValue();
@@ -193,6 +196,7 @@
             update(contents);
           }
           else {
+            console.log(contents);
             update(null, contents);
           }
         });
