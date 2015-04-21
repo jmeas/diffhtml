@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+    <title>Element.prototype.diffHTML</title>
+
+    <link rel="stylesheet" href="prism.css">
+    <link rel="stylesheet" href="codemirror.css">
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: auto; padding: 20px; max-width: 960px; }
+      pre { word-wrap: break-word; }
+      pre code {
+        width: 100%;
+        display: block;
+      }
+      pre.code {
+        width: 100%;
+      }
+      .editor, output {
+        float: left;
+        width: 50%;
+        min-height: 200px;
+        transition: background linear .2s;
+        margin-bottom: 20px;
+      }
+      output {
+        margin-top: 8px;
+        margin-left: 20px;
+        width: calc(50% - 20px);
+        border: 1px solid #F5F2F0;
+        background: #FFFBDC;
+        padding: 20px;
+        padding-top: 0;
+      }
+      .json {
+        width: 100%;
+        transition: background linear .2s;
+      }
+      .editor.error, .json.error {
+        background: #F3D0D0;
+      }
+      .CodeMirror {
+        background: transparent;
+        height: auto;
+        font-size: 16px;
+        top: -4px;
+        left: -4px;
+        font-family: Consolas,Monaco,"Andale Mono",monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Element.prototype.diffHTML</h1>
+    <iframe src="https://ghbtns.com/github-btn.html?user=tbranyen&repo=diffhtml&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+    <p>
+      Allows you to easily swap out markup and have an intelligent virtual diff
+      patch in the changes. Contrast to innerHTML that blows everything away
+      when set.
+    </p>
+
+    <pre class="language-javascript code"><code>document.querySelector('main').diffHTML = '<new markup to diff/>';</code></pre>
+
+    <p>
+    </p>
+
+    <h2>About</h2>
+    <p>
+      As you can see with the example above, this is a native extension to the
+      browser's Element prototype.  The property `diffHTML` is a dynamic
+      JavaScript setter, that uses the excellent <a
+      href="https://github.com/Matt-Esch/virtual-dom">virtual-dom</a> library
+      under the hood.  This library accepts a virtual tree and applies patches directly to the
+      element.  While this dependency is excellent at diffing and patching, its
+      interface requires using <a
+      href"https://github.com/dominictarr/hyperscript">HyperScript</a>.
+    </p>
+    <p>
+      Since this library allows you to pass straight HTML, we must first
+      convert it to HyperScript so that the diffing library can process
+      patches.  I've accomplished this by parsing the markup passed through a
+      hidden DOM Document created when the library is parsed.  Inside this
+      disconnect Document, an empty <code>&lt;div&gt;</code> is created and
+      <code>innerHTML</code> is applied to parse out the DOM tree using
+      very little code.
+    </p>
+
+    <h2>Demo</h2>
+
+    <p>
+      Feel free to change the markup and JSON data below.  The output will
+      update automatically with the changes.
+    </p>
+
+    <div style="clear: both;">
+      <pre class="language-handlebars editor"></pre>
+
+      <output></output>
+    </div>
+
+    <pre class="language-javascript json"></pre> 
+
+    <script src="prism.js"></script>
+    <script src="codemirror.js"></script>
+    <script src="mustache.js"></script>
+    <script src="dist/diffhtml.js"></script>
+    <script>
+      var editor = document.querySelector('.editor');
+      var json = document.querySelector('.json');
+      var output = document.querySelector('output');
+
+      function parseEntities(string) {
+        var textarea = document.createElement('textarea');
+        textarea.innerHTML = string;
+        return textarea.value;
+      }
+
+      function text(node) {
+        return [].reduce.call(node.childNodes, function(memo, node) {
+          if (node.nodeType === 3) {
+            memo.push(node.nodeValue);
+            return memo;
+          }
+
+          return memo.concat(text(node));
+        }, []).join('');
+      }
+
+      var defaults = {
+        editorText: ['<div>', '  <h1>{{value}}</h1>', '</div>'].join('\n'),
+        jsonText: ['{', '  "value": "Just a simple demo..."', '}'].join('\n')
+      }
+
+      function update(editorText, jsonText) {
+        editorText = editorText || defaults.editorText;
+        jsonText = jsonText || defaults.jsonText;
+
+        try {
+          var markup = parseEntities(editorText);
+          var data = JSON.parse(jsonText);
+
+          json.classList.remove('error');
+          output.diffHTML = Mustache.render(markup, data);
+          editor.classList.remove('error');
+
+        } catch(ex) {
+          console.log(ex);
+          if (ex.message.indexOf('JSON') === 0) {
+            json.classList.add('error');
+          }
+          else {
+            editor.classList.add('error');
+          }
+        }
+      }
+
+      update();
+
+      makeCodeMirror(editor, 'editorText');
+      makeCodeMirror(json, 'jsonText');
+
+      function makeCodeMirror(el, name) {
+        var codeMirror = CodeMirror(el, { value: defaults[name] });
+
+        codeMirror.on('inputRead', function(ev) {
+          var contents = codeMirror.getValue();
+
+          if (el.classList.contains('editor')) {
+            update(contents);
+          }
+          else {
+            update(null, contents);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
