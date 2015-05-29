@@ -11,7 +11,7 @@
      transform: translatez(0);
     }
     rect {
-      /*transition: all linear .2s;*/
+      transition: all linear .5s;
     }
   </style>
 </head>
@@ -62,7 +62,10 @@
       }
 
       svg.outerDiffHTML = template.render({ rects: rects });
-      requestAnimationFrame(render);
+
+      setTimeout(function() {
+        requestAnimationFrame(render);
+      }, 500);
     }
     render();
   </script>
