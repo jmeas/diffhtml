@@ -9,16 +9,18 @@
     html, body { width: 100%; height: 100%; position: relative; padding: 0; margin: 0; }
     svg { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; 
      transform: translatez(0);
+     transition: all ease-in .3s;
     }
-    rect {
-      transition: all linear .5s;
-    }
+    body { transition: background ease-in .3s; }
   </style>
 </head>
+
 <body>
   <svg></svg>
+</body>
 
-  <script type="template">
+<script type="template">
+  <body style="background: rgb({{ r }}, {{ g }}, {{ b }})">
     <svg width="100%" height="100%">
       {%each rects as rect%}
         <rect
@@ -26,48 +28,68 @@
           y="{{ rect.y }}"
           height="{{ rect.height }}"
           width="{{ rect.width }}"
-          style="fill:rgb({{ rect.r }}, {{ rect.g }}, {{ rect.b }})"
+          style="transition: all {{ rect.tween }} .3s;fill:rgba({{ rect.r }}, {{ rect.g }}, {{ rect.b }}, {{ rect.o }})"
         />
       {%endeach%}
     </svg>
-  </script>
+  </body>
+</script>
 
-  <script src="dist/diffhtml.js"></script>
-  <script src="benchmarks/node_modules/combyne/dist/combyne.js"></script>
+<script src="dist/diffhtml.js"></script>
+<script src="benchmarks/node_modules/combyne/dist/combyne.js"></script>
 
-  <script>
-    var template = combyne(document.querySelector('[type=template]').innerHTML);
-    var svg = document.querySelector('svg');
-    var count = 100;
+<script>
+  var template = combyne(document.querySelector('[type=template]').innerHTML);
+  var body = document.querySelector('body');
+  var count = 0;
 
-    function render() {
-      var rects = new Array(count);
+  function render() {
+    var rects = new Array(count);
+    var tweens = [
+      'ease',
+      'ease-in',
+      'ease-out',
+      'ease-in-out',
+      'linear'
+    ];
 
-      for (var i = 0; i < count; i++) {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        var height = Math.floor(Math.random() * window.innerHeight);
-        var width = Math.floor(Math.random() * window.innerWidth);
-
-        rects[i] = {
-          r: r,
-          g: g,
-          b: b,
-          x: Math.floor(Math.random() * Math.abs(window.innerWidth - width)),
-          y: Math.floor(Math.random() * Math.abs(window.innerHeight - height)),
-          width: width,
-          height: height 
-        };
-      }
-
-      svg.outerDiffHTML = template.render({ rects: rects });
-
-      setTimeout(function() {
-        requestAnimationFrame(render);
-      }, 500);
+    // Cap for now.
+    if (count < 120) {
+      ++count;
     }
-    render();
-  </script>
-</body>
+
+    for (var i = 0; i < count; i++) {
+      var r = Math.floor(Math.random() * 255);
+      var g = Math.floor(Math.random() * 255);
+      var b = Math.floor(Math.random() * 255);
+      var height = Math.floor(Math.random() * 500);
+      var width = Math.floor(Math.random() * 500);
+      var tween = Math.floor(Math.random() * 5);
+
+      rects[i] = {
+        tween: tweens[tween],
+        o: Math.floor(100-(Math.random() * 100)),
+        r: r,
+        g: g,
+        b: b,
+        x: Math.floor(Math.random() * Math.abs(window.innerWidth - width)),
+        y: Math.floor(Math.random() * Math.abs(window.innerHeight - height)),
+        width: width,
+        height: height 
+      };
+    }
+
+    body.outerDiffHTML = template.render({
+      r: Math.floor(Math.random() * 255),
+      g: Math.floor(Math.random() * 255),
+      b: Math.floor(Math.random() * 255),
+      rects: rects
+    });
+
+    setTimeout(function() {
+      requestAnimationFrame(render);
+    }, 300);
+  }
+  render();
+</script>
 </html>
