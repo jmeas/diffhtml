@@ -134,12 +134,6 @@
       var json = document.querySelector('.json');
       var output = document.querySelector('output');
 
-      function parseEntities(string) {
-        var textarea = document.createElement('textarea');
-        textarea.innerHTML = string;
-        return textarea.value;
-      }
-
       function text(node) {
         return [].reduce.call(node.childNodes, function(memo, node) {
           if (node.nodeType === 3) {
@@ -164,11 +158,10 @@
         defaults.jsonText = jsonText;
 
         try {
-          var markup = parseEntities(editorText);
           var data = JSON.parse(jsonText);
 
           json.classList.remove('error');
-          output.diffHTML = Mustache.render(markup, data);
+          diff.innerHTML(output, Mustache.render(editorText, data));
           editor.classList.remove('error');
 
         } catch(ex) {
