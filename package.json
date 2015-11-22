@@ -11,6 +11,7 @@
     "build": "browserify -t babelify -s diff lib/index.js | derequire > dist/diffhtml.js",
     "build-test": "browserify -t babelify -s diff lib/index.js -o dist/diffhtml.js -g requireify -t requireify",
     "watch": "watchify -t babelify -t requireify -g requireify -d -s diff lib/index.js -o dist/diffhtml.js -v",
+    "watch-dev": "watchify -t babelify -d -s diff lib/index.js -o 'derequire > dist/diffhtml.js' -v",
     "jshint": "jshint lib/*.js",
     "mocha": "mocha-phantomjs test/index.html",
     "test": "npm run jshint && npm run build-test && npm run mocha"
