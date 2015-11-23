@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+    <title>Test</title>
+  </head>
+  <body>
+    <div></div>
+    <script src="dist/diffhtml.js"></script>
+    <script>
+      diff.outerHTML(document.querySelector('div'), '<div><h1>Hello</h1></div>');
+    </script>
+  </body>
+</html>

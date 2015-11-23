@@ -1,37 +1,9 @@
-describe('Unit: Element', function() {
-  describe('get', function() {
-    var getElement = require('/lib/element/get');
+define(function(require) {
+  'use strict';
 
-    it('creates an element from descriptor on first access', function() {
-      var retVal = getElement({
-        element: 'some_uuid',
-        nodeName: 'div',
-        nodeValue: 'test'
-      });
+  var makeElement = require('../../../../lib/element/get');
 
-      assert.equal(retVal.uuid, 'some_uuid');
-      assert.ok(retVal.element instanceof Element);
-      assert.equal(retVal.element.textContent, 'test');
-    });
-
-    it('can get an existing element descriptor', function() {
-      getElement({
-        element: 'some_uuid',
-        nodeName: 'div',
-        nodeValue: 'test'
-      });
-
-      var retVal = getElement({ element: 'some_uuid' });
-
-      assert.equal(retVal.uuid, 'some_uuid');
-      assert.ok(retVal.element instanceof Element);
-      assert.equal(retVal.element.textContent, 'test');
-    });
-  });
-
-  describe('make', function() {
-    var makeElement = require('/lib/element/make');
-
+  describe('makeElement', function() {
     it('can create an empty element', function() {
       var element = makeElement({
         element: 'some_uuid_0',
@@ -87,4 +59,3 @@ describe('Unit: Element', function() {
     });
   });
 });
-
