@@ -1369,6 +1369,24 @@ function process(element, patches) {
     titleCallback(el);
   };
 
+  // Recursively searches an element for detach transitions and pushes into
+  // an array that will then be added to the global promise array.
+  var findAllDetachPromises = function findAllDetachPromises(el, detachPromises) {
+    if (el.nodeName === '#text' || el.nodeName === 'text') {
+      return;
+    }
+
+    var promises = states.detached.map(callCallback, el).filter(Boolean);
+
+    if (promises.length) {
+      detachPromises.push.apply(detachPromises, promises);
+    }
+
+    forEach.call(el.childNodes, function (childEl) {
+      findAllDetachPromises(childEl, detachPromises);
+    });
+  };
+
   var callCallback = function callCallback(callback) {
     return callback(this);
   };
@@ -1485,10 +1503,19 @@ function process(element, patches) {
               customElement.prototype.detachedCallback.call(patch.old);
             }
 
-            patch.old.parentNode.removeChild(patch.old);
-
             if (states && states.detached && states.detached.length) {
-              addPromises(states.detached.map(callCallback, patch.old));
+              var _promises = [];
+              findAllDetachPromises(patch.old, _promises);
+
+              if (!_promises.length) {
+                patch.old.parentNode.removeChild(patch.old);
+              } else {
+                Promise.all(_promises).then(function () {
+                  patch.old.parentNode.removeChild(patch.old);
+                });
+              }
+            } else {
+              patch.old.parentNode.removeChild(patch.old);
             }
 
             _nodeMake2['default'].nodes[oldDescriptor.element] = undefined;
@@ -1503,16 +1530,28 @@ function process(element, patches) {
               // Append the element first, before doing the replacement.
               patch.old.parentNode.insertBefore(patch['new'], patch.old.nextSibling);
 
+              promises = [];
+
               // Removed state for transitions API.
               if (states && states.detached && states.detached.length) {
-                addPromises(states.detached.map(callCallback, patch.old));
+                var detachedPromises = states.detached.map(callCallback, patch.old).filter(Boolean);
+
+                if (detachedPromises.length) {
+                  addPromises(detachedPromises);
+                  promises.push.apply(promises, detachedPromises);
+                }
               }
 
               // Replaced state for transitions API.
               if (states && states.replaced && states.replaced.length) {
-                addPromises(states.replaced.map(function (callback) {
+                var replacedPromises = states.replaced.map(function (callback) {
                   return callback(patch.old, patch['new']);
-                }));
+                }).filter(Boolean);
+
+                if (replacedPromises.length) {
+                  addPromises(replacedPromises);
+                  promises.push.apply(promises, replacedPromises);
+                }
               }
 
               // Ensure the title is set correctly.
@@ -1520,7 +1559,13 @@ function process(element, patches) {
                 patch.old.ownerDocument.title = patch['new'].childNodes[0].nodeValue;
               }
 
-              patch.old.parentNode.replaceChild(patch['new'], patch.old);
+              if (!promises.length) {
+                patch.old.parentNode.replaceChild(patch['new'], patch.old);
+              } else {
+                Promise.all(promises).then(function () {
+                  patch.old.parentNode.replaceChild(patch['new'], patch.old);
+                });
+              }
 
               var oldCustomElement = _elementCustom.components[oldDescriptor.nodeName] || empty;
               var newCustomElement = _elementCustom.components[newDescriptor.nodeName] || empty;
@@ -1621,6 +1666,8 @@ function process(element, patches) {
   };
 
   for (var i = 0; i < patches.length; i++) {
+    var promises;
+
     _loop(i);
   }
 

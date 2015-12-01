@@ -328,14 +328,12 @@ describe('Integration: Transitions', function() {
         count++;
 
         if (count === 2) {
+          assert.equal(this.fixture.querySelector('p'), null);
+          assert.ok(this.fixture.querySelector('span'));
           assert.equal(this.fixture.querySelector('span').textContent, 'test2');
           done();
         }
       }.bind(this));
-
-      assert.equal(this.fixture.querySelector('p'), null);
-      assert.ok(this.fixture.querySelector('span'));
-      assert.equal(this.fixture.querySelector('span').textContent, 'test');
     });
 
     it('will hold off rendering until detached (no replace) promise resolves', function(done) {
@@ -345,21 +343,20 @@ describe('Integration: Transitions', function() {
       });
 
       diff.addTransitionState('detached', function(el) { return promise; });
-      diff.innerHTML(this.fixture, '<div><p></p></div>');
-      diff.innerHTML(this.fixture, '<div></div>');
-      diff.innerHTML(this.fixture, '<div><span>test</span></div>');
 
       this.fixture.addEventListener('renderComplete', function() {
         count++;
 
-        if (count === 2) {
+        if (count === 3) {
+          assert.equal(this.fixture.querySelector('p'), null);
           assert.equal(this.fixture.querySelector('span').textContent, 'test');
           done();
         }
       }.bind(this));
 
-      assert.equal(this.fixture.querySelector('p'), null);
-      assert.equal(this.fixture.querySelector('span'), null);
+      diff.innerHTML(this.fixture, '<div><p></p></div>');
+      diff.innerHTML(this.fixture, '<div></div>');
+      diff.innerHTML(this.fixture, '<div><span>test</span></div>');
     });
 
     it('will hold off rendering until replaced promise resolves', function(done) {
