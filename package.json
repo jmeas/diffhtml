@@ -27,6 +27,7 @@
     "mocha-phantomjs": "^4.0.1",
     "mocha-phantomjs-istanbul": "^0.0.2",
     "promise-polyfill": "^2.1.0",
+    "requirejs": "^2.1.22",
     "watchify": "^3.4.0",
     "weakmap": "^0.0.6"
   },

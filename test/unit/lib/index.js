@@ -44,6 +44,17 @@ define(function(require) {
           index.outerHTML();
         });
       });
+
+      it('can support modifying the outerHTML of an element', function() {
+        var fixture = document.createElement('div');
+        var markup = '<div id="test"><span>Test</span></div>';
+
+        index.outerHTML(fixture, markup);
+
+        assert.equal(fixture.outerHTML, markup);
+
+        index.release(fixture);
+      });
     });
 
     describe('InnerHTML', function() {
@@ -75,6 +86,17 @@ define(function(require) {
         assert.throws(function() {
           index.element();
         });
+      });
+
+      it('can support modifying the innerHTML of an element', function() {
+        var fixture = document.createElement('div');
+        var markup = '<div id="test"><span>Test</span></div>';
+
+        index.innerHTML(fixture, markup);
+
+        assert.equal(fixture.innerHTML, markup);
+
+        index.release(fixture);
       });
     });
   });
