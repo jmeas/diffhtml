@@ -16,14 +16,23 @@
     "test": "npm run jshint && npm run build-test && npm run mocha"
   },
   "devDependencies": {
+    "babel-core": "^5.2.17",
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
     "browserify-istanbul": "^0.2.1",
     "custom-event": "^1.0.0",
     "customevent-shim": "^0.1.0",
+    "del": "^2.2.0",
     "derequire": "^2.0.2",
+    "glob": "^6.0.2",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.0.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-util": "^3.0.7",
     "http-server": "^0.8.5",
-    "isparta": "^3.5.3",
+    "isparta": "^4.0.0",
     "istanbul": "^0.3.22",
     "jshint": "^2.8.0",
     "karma": "^0.13.15",
@@ -31,9 +40,13 @@
     "mocha": "^2.3.3",
     "mocha-phantomjs": "^4.0.1",
     "mocha-phantomjs-istanbul": "^0.0.2",
+    "path": "^0.12.7",
     "promise-polyfill": "^2.1.0",
     "requireify": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0",
-    "weakmap": "^0.0.6"
+    "weakmap": "^0.0.6",
+    "webpack": "^1.12.9",
+    "webpack-stream": "^3.1.0"
   }
 }
