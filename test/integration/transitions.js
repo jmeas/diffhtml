@@ -1,3 +1,5 @@
+import diff from '../../lib';
+
 describe('Integration: Transitions', function() {
   beforeEach(function() {
     this.fixture = document.createElement('div');

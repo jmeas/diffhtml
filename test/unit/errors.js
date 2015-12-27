@@ -1,5 +1,5 @@
 describe('Unit: Errors', function() {
-  var errors = require('/lib/errors');
+  var errors = require('../../lib/errors');
 
   describe('TransitionStateError', function() {
     var TransitionStateError = errors.TransitionStateError;

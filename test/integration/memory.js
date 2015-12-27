@@ -1,6 +1,8 @@
+import diff from '../../lib';
+
 describe('Integration: Memory management', function() {
-  var pools = require('/lib/util/pools').pools;
-  var nodes = require('/lib/node/make');
+  var pools = require('../../lib/util/pools').pools;
+  var nodes = require('../../lib/node/make');
 
   window.pools = pools;
   window.nodes = nodes;

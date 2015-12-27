@@ -1,3 +1,5 @@
+import diff from '../../lib';
+
 describe('Integration: SVG', function() {
   beforeEach(function() {
     this.fixture = document.createElement('div');

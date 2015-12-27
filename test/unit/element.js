@@ -1,6 +1,6 @@
 describe('Unit: Element', function() {
   describe('get', function() {
-    var getElement = require('/lib/element/get');
+    var getElement = require('../../lib/element/get');
 
     it('creates an element from descriptor on first access', function() {
       var retVal = getElement({
@@ -30,7 +30,7 @@ describe('Unit: Element', function() {
   });
 
   describe('make', function() {
-    var makeElement = require('/lib/element/make');
+    var makeElement = require('../../lib/element/make');
 
     it('can create an empty element', function() {
       var element = makeElement({
@@ -87,4 +87,3 @@ describe('Unit: Element', function() {
     });
   });
 });
-

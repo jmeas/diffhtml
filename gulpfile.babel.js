@@ -14,11 +14,11 @@ import manifest from './package.json';
 const $ = loadPlugins();
 
 const config = {
-  "entryFileName": "diffhtml",
-  "mainVarName": "diff",
-  "mochaGlobals": [
-    "stub", "spy", "expect", "sandbox", "mock",
-    "useFakeTimers", "useFakeXMLHttpRequest", "useFakeServer"
+  'entryFileName': 'diffhtml',
+  'mainVarName': 'diff',
+  'mochaGlobals': [
+    'stub', 'spy', 'expect', 'sandbox', 'mock', 'assert',
+    'useFakeTimers', 'useFakeXMLHttpRequest', 'useFakeServer'
   ]
 };
 const mainFile = manifest.main;
@@ -90,7 +90,7 @@ function build() {
 }
 
 function _mocha() {
-  return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
+  return gulp.src(['test/setup/node.js', 'test/unit/**/*.js', 'test/integration/**/*.js'], {read: false})
     .pipe($.mocha({
       reporter: 'dot',
       globals: config.mochaGlobals,
@@ -194,7 +194,7 @@ gulp.task('lint', ['lint-src', 'lint-test', 'lint-gulpfile']);
 gulp.task('build', ['lint', 'clean'], build);
 
 // Lint and run our tests
-gulp.task('test', ['lint'], test);
+gulp.task('test', test);
 
 // Set up coverage and run tests
 gulp.task('coverage', ['lint'], coverage);

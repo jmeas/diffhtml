@@ -1,5 +1,5 @@
 describe('Unit: SVG', function() {
-  var svg = require('/lib/svg');
+  var svg = require('../../lib/svg');
 
   it('exports a list of valid SVG elements', function() {
     assert.ok(Array.isArray(svg.elements));
