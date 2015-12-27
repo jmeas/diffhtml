@@ -112,7 +112,7 @@ function _registerBabel() {
 
 function test() {
   _registerBabel();
-  return _mochaPhantom();
+  return _mocha();
 }
 
 function coverage(done) {
