@@ -98,13 +98,21 @@ function _mocha() {
     }));
 }
 
+function _mochaPhantom() {
+  return gulp.src('test/index.html')
+    .pipe($.mochaPhantomjs({
+      reporter: 'dot'
+    }));
+}
+
+
 function _registerBabel() {
   require('babel-core/register');
 }
 
 function test() {
   _registerBabel();
-  return _mocha();
+  return _mochaPhantom();
 }
 
 function coverage(done) {
@@ -130,7 +138,7 @@ function testBrowser() {
   // Our testing bundle is made up of our unit tests, which
   // should individually load up pieces of our application.
   // We also include the browser setup file.
-  const testFiles = glob.sync('./test/unit/**/*.js');
+  const testFiles = glob.sync('./test/{unit,integration}/**/*.js');
   const allFiles = ['./test/setup/browser.js'].concat(testFiles);
 
   // Lets us differentiate between the first build and subsequent builds
@@ -141,7 +149,7 @@ function testBrowser() {
   return gulp.src('')
     .pipe($.plumber())
     .pipe(webpackStream({
-      watch: true,
+      // watch: true,
       entry: allFiles,
       output: {
         filename: '__spec-build.js'
@@ -161,13 +169,13 @@ function testBrowser() {
       ],
       devtool: 'inline-source-map'
     }, null, function() {
-      if (firstBuild) {
-        $.livereload.listen({port: 35729, host: 'localhost', start: true});
-        var watcher = gulp.watch(watchFiles, ['lint']);
-      } else {
-        $.livereload.reload('./tmp/__spec-build.js');
-      }
-      firstBuild = false;
+      // if (firstBuild) {
+      //   $.livereload.listen({port: 35729, host: 'localhost', start: true});
+      //   var watcher = gulp.watch(watchFiles, ['lint']);
+      // } else {
+      //   $.livereload.reload('./tmp/__spec-build.js');
+      // }
+      // firstBuild = false;
     }))
     .pipe(gulp.dest('./tmp'));
 }
@@ -197,10 +205,10 @@ gulp.task('build', ['lint', 'clean'], build);
 gulp.task('test', test);
 
 // Set up coverage and run tests
-gulp.task('coverage', ['lint'], coverage);
+gulp.task('coverage', ['test-browser'], coverage);
 
 // Set up a livereload environment for our spec runner `test/runner.html`
-gulp.task('test-browser', ['lint', 'clean-tmp'], testBrowser);
+gulp.task('test-browser', ['clean-tmp'], testBrowser);
 
 // Run the headless unit tests as you make changes.
 gulp.task('watch', watch);

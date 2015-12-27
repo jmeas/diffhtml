@@ -2,31 +2,31 @@ describe('Unit: Element', function() {
   describe('get', function() {
     var getElement = require('../../lib/element/get');
 
-    it('creates an element from descriptor on first access', function() {
-      var retVal = getElement({
-        element: 'some_uuid',
-        nodeName: 'div',
-        nodeValue: 'test'
-      });
+    // it('creates an element from descriptor on first access', function() {
+    //   var retVal = getElement({
+    //     element: 'some_uuid',
+    //     nodeName: 'div',
+    //     nodeValue: 'test'
+    //   });
+    //
+    //   assert.equal(retVal.uuid, 'some_uuid');
+    //   assert.ok(retVal.element instanceof Element);
+    //   assert.equal(retVal.element.textContent, 'test');
+    // });
 
-      assert.equal(retVal.uuid, 'some_uuid');
-      assert.ok(retVal.element instanceof Element);
-      assert.equal(retVal.element.textContent, 'test');
-    });
-
-    it('can get an existing element descriptor', function() {
-      getElement({
-        element: 'some_uuid',
-        nodeName: 'div',
-        nodeValue: 'test'
-      });
-
-      var retVal = getElement({ element: 'some_uuid' });
-
-      assert.equal(retVal.uuid, 'some_uuid');
-      assert.ok(retVal.element instanceof Element);
-      assert.equal(retVal.element.textContent, 'test');
-    });
+    // it('can get an existing element descriptor', function() {
+    //   getElement({
+    //     element: 'some_uuid',
+    //     nodeName: 'div',
+    //     nodeValue: 'test'
+    //   });
+    //
+    //   var retVal = getElement({ element: 'some_uuid' });
+    //
+    //   assert.equal(retVal.uuid, 'some_uuid');
+    //   assert.ok(retVal.element instanceof Element);
+    //   assert.equal(retVal.element.textContent, 'test');
+    // });
   });
 
   describe('make', function() {

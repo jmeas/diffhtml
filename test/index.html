@@ -1,38 +1,26 @@
-<html>
+<!doctype html>
+<!-- You need to run `gulp test-browser` before opening this in your browser -->
+<html lang='en'>
 <head>
-  <meta charset="utf-8">
-  <title>diffhtml tests</title>
-  <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
-  <style>iframe { display: none; }</style>
+  <meta charset='utf-8'>
+  <title>Tests</title>
+  <link rel='stylesheet' href='../node_modules/mocha/mocha.css' />
+
+  <!-- Polyfill (required by Babel) -->
+  <script src='../node_modules/babel-core/browser-polyfill.js'></script>
+
+  <!-- Testing libraries -->
+  <script src='../node_modules/mocha/mocha.js'></script>
+  <script src='assert.js'></script>
+
+  <!-- Livereload -->
+  <script src='http://localhost:35729/livereload.js'></script>
+
+  <!-- Load the built library -->
+  <script src='../tmp/__spec-build.js'></script>
 </head>
 <body>
-  <div id="mocha"></div>
-  <script src="assert.js"></script>
-  <script src="../node_modules/mocha/mocha.js"></script>
-  <script src="../node_modules/promise-polyfill/Promise.js"></script>
-  <script src="../node_modules/weakmap/weakmap.js"></script>
-  <script>mocha.setup('bdd')</script>
-  <script src="../dist/diffhtml.js"></script>
-
-  <!-- Unit tests. -->
-  <script src="unit/svg.js"></script>
-  <script src="unit/errors.js"></script>
-  <script src="unit/transitions.js"></script>
-  <script src="unit/element.js"></script>
-  <script src="unit/util/parser.js"></script>
-
-  <!-- Integration tests. -->
-  <script src="integration/basics.js"></script>
-  <script src="integration/inner.js"></script>
-  <script src="integration/outer.js"></script>
-  <script src="integration/transitions.js"></script>
-  <script src="integration/svg.js"></script>
-  <script src="integration/memory.js"></script>
-  <script src="integration/custom.js"></script>
-
-  <script>
-    if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-    else { mocha.run(); }
-  </script>
+  <!-- Required for browser reporter -->
+  <div id='mocha'></div>
 </body>
 </html>
